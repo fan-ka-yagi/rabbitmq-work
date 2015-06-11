@@ -4,21 +4,34 @@ import pika
 import time
 import sys
 
+host_name        = str(sys.argv[1])
+exchange_name    = str(sys.argv[2])
+queue_name       = str(sys.argv[3])
+routing_key_name = str(sys.argv[4])
+
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=str(sys.argv[1])))
+        host=host_name))
 channel = connection.channel()
 
-channel.queue_declare(queue=str(sys.argv[2]), durable=True)
+channel.exchange_declare(exchange=exchange_name,
+                         type='topic')
+
+result = channel.queue_declare(queue=queue_name, durable=True)
+
+channel.queue_bind(exchange=exchange_name,
+                   queue=queue_name,
+                   routing_key=routing_key_name)
+
 print ' [*] Waiting for messages. To exit press CTRL+C'
 
 def callback(ch, method, properties, body):
-    print " [x] Received %r" % (body,)
+    print " [x] Received %r:%r" % (method.routing_key, body,)
     time.sleep( body.count('.') )
     print " [x] Done"
     ch.basic_ack(delivery_tag = method.delivery_tag)
 
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(callback,
-                      queue=str(sys.argv[2]))
+                      queue=queue_name)
 
 channel.start_consuming()

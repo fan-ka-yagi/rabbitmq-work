@@ -3,15 +3,23 @@
 import pika
 import sys
 
+host_name        = str(sys.argv[1])
+exchange_name    = str(sys.argv[2])
+queue_name       = str(sys.argv[3])
+routing_key_name = str(sys.argv[4])
+
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=str(sys.argv[1])))
+        host=host_name))
 channel = connection.channel()
 
-channel.queue_declare(queue=str(sys.argv[2]), durable=True)
+channel.exchange_declare(exchange=exchange_name,
+                         type='topic')
 
-message = ' '.join(sys.argv[3:]) 
-channel.basic_publish(exchange='',
-                      routing_key=str(sys.argv[2]),
+channel.queue_declare(queue=queue_name, durable=True)
+
+message = ' '.join(sys.argv[5:]) 
+channel.basic_publish(exchange=exchange_name,
+                      routing_key=routing_key_name,
                       body=message,
                       properties=pika.BasicProperties(
                          delivery_mode = 2, # make message persistent
