@@ -6,13 +6,13 @@ Install
 
 Usage
 ===============
-	$ ./producer.py <host> <queue> "string"
-	$ ./consumer.py <host> <queue>
+	$ ./producer.py <host> <exchange> <queue> <routing_key> "string"
+	$ ./consumer.py <host> <exchange> <queue> <routing_key>
 
 Example
 ===============
 	$ # send 
-	$ for i in `seq 1 10`; do ./producer.by 10.0.0.123 test_queue "msg ${i} ..."; done
+	$ for i in `seq 1 10`; do ./producer.by 10.0.0.123 test.exchange test.queue test.routing_key "msg ${i} ..."; done
 
 	$ # receive
-	$ ./consumer.py 10.0.0.123 test_queue
+	$ ./consumer.py 10.0.0.123 test.exchange test.queue test.routing_key
