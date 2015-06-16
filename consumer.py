@@ -9,8 +9,9 @@ exchange_name    = str(sys.argv[2])
 queue_name       = str(sys.argv[3])
 routing_key_name = str(sys.argv[4])
 
+credentials = pika.PlainCredentials('user', 'password')
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=host_name))
+        host_name, 5672, '/', credentials))
 channel = connection.channel()
 
 channel.exchange_declare(exchange=exchange_name,
