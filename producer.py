@@ -18,6 +18,10 @@ channel.exchange_declare(exchange=exchange_name,
 
 channel.queue_declare(queue=queue_name, durable=True)
 
+channel.queue_bind(exchange=exchange_name,
+                   queue=queue_name,
+                   routing_key=routing_key_name)
+
 message = ' '.join(sys.argv[5:]) 
 channel.basic_publish(exchange=exchange_name,
                       routing_key=routing_key_name,
