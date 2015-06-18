@@ -15,7 +15,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(
 channel = connection.channel()
 
 channel.exchange_declare(exchange=exchange_name,
-                         type='topic')
+                         type='topic', durable=True)
 
 result = channel.queue_declare(queue=queue_name, durable=True)
 
