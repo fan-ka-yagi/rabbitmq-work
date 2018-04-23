@@ -38,4 +38,5 @@ channel.basic_consume(callback,
 channel.start_consuming()
 
 print 'a'
+print 'b'
 
