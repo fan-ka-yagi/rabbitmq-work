@@ -36,3 +36,6 @@ channel.basic_consume(callback,
                       queue=queue_name)
 
 channel.start_consuming()
+
+print 'a'
+
